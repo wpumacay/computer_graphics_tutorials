@@ -143,15 +143,19 @@ namespace engine
         vector<LVec3> _normals;
         vector<LInd3> _indices;
 
-        ifstream _fileHandle( "../res/models/model_sphere_8.obj" );
+        ifstream _fileHandle( filename );
+
+        if ( !_fileHandle.is_open() )
+        {
+            cout << "LMeshBuilder::createFromFile> couldn't open the file " << filename << endl;
+            return NULL;
+        }
 
         string _line;
 
         getline( _fileHandle, _line );
 
         int _numFaces = stoi( _line );
-
-        int _indxCounter = 0;
 
         for ( int q = 0; q < _numFaces; q++ )
         {
@@ -162,22 +166,30 @@ namespace engine
             for ( int p = 0; p < _numVertices; p++ )
             {
                 getline( _fileHandle, _line );
-                vector<string> _elemns = LMeshBuilder::_split( _line );
+                vector<string> _vStr = LMeshBuilder::_split( _line, ' ' );
 
-                GLfloat _vx = stof( _elemns[0] );
-                GLfloat _vy = stof( _elemns[1] );
-                GLfloat _vz = stof( _elemns[2] );
+                GLfloat _vx = stof( _vStr[0] );
+                GLfloat _vy = stof( _vStr[1] );
+                GLfloat _vz = stof( _vStr[2] );
 
                 _vertices.push_back( LVec3( _vx, _vy, _vz ) );
-                _indices.push_back( LInd3( _indxCounter, 
-                                           _indxCounter + 1, 
-                                           _indxCounter + 2 ) );
-                _indxCounter += 3;
             }
 
-            LVec3 _n = _computeFaceNormal();
+            int _i1 = _indices.size() * 3;
+            int _i2 = _indices.size() * 3 + 1;
+            int _i3 = _indices.size() * 3 + 2;
+
+            _indices.push_back( LInd3( _i1, _i2, _i3 ) );
+
+            LVec3 _n = _computeFaceNormal( _vertices[_i1], 
+                                           _vertices[_i2], 
+                                           _vertices[_i3] );
+            _normals.push_back( _n );
+            _normals.push_back( _n );
+            _normals.push_back( _n );
         }
 
+        _mesh = new LMesh( _vertices, _normals, _indices );
 
         return _mesh;
     }
@@ -185,6 +197,47 @@ namespace engine
 
 
 
+    /***********************************************************************
+    * HELPER FUNCTIONS
+    ************************************************************************/
 
+
+    LVec3 LMeshBuilder::_computeFaceNormal( LVec3 v1, LVec3 v2, LVec3 v3 )
+    {
+        LVec3 _res;
+
+        LVec3 _v12 = v2 - v1;
+        LVec3 _v23 = v3 - v2;
+
+        _res = LVec3::cross( _v12, _v23 );
+
+        return _res;
+    }
+
+    vector<string> LMeshBuilder::_split( const string& txt, char separator )
+    {
+        vector<string> _res;
+                    
+        int pos = txt.find( separator );
+        if ( pos == std::string::npos )
+        {
+            _res.push_back( txt );
+            return _res;
+        }
+
+        int initpos = 0;
+
+        while ( pos != std::string::npos )
+        {
+            _res.push_back( txt.substr( initpos, pos - initpos + 1 ) );
+            initpos = pos + 1;
+
+            pos = txt.find( separator, initpos );
+        }
+
+        _res.push_back( txt.substr( initpos, std::min( pos, (int) txt.size() ) - initpos + 1 ) );
+                    
+        return _res;
+    }
 
 }

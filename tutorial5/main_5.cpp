@@ -47,7 +47,8 @@ int main()
 
     GLuint _pSimple3d = engine::LShaderManager::INSTANCE->programs["basic3d"];
 
-    engine::LMesh* _cube = engine::LMeshBuilder::createBox( 0.5, 0.5, 0.5 );
+    //engine::LMesh* _cube = engine::LMeshBuilder::createBox( 0.5, 0.5, 0.5 );
+    engine::LMesh* _sphere = engine::LMeshBuilder::createFromFile( "../res/models/model_sphere_1024.obj" );
 
     engine::LMesh* _plane = engine::LMeshBuilder::createPlane( 10.0f, 10.0f );
 
@@ -64,7 +65,7 @@ int main()
                                               (float) _window.width() / _window.height(),
                                               0.1f, 100.0f );
 
-    _cube->pos = engine::LVec3( 3.0f, 1.0f, 5.0f );
+    _sphere->pos = engine::LVec3( 3.0f, 1.0f, 5.0f );
 
     while ( _window.isActive() )
     {
@@ -75,27 +76,32 @@ int main()
 
         glUseProgram( _pSimple3d );
 
-        // Drawing cube
+        
         GLuint u_tModel = glGetUniformLocation( _pSimple3d, "u_tModel" );
         GLuint u_tView = glGetUniformLocation( _pSimple3d, "u_tView" );
         GLuint u_tProj = glGetUniformLocation( _pSimple3d, "u_tProj" );
+        GLuint u_color = glGetUniformLocation( _pSimple3d, "u_color" );
 
-        glUniformMatrix4fv( u_tModel, 1, GL_FALSE, glm::value_ptr( _cube->getModelMatrix() ) );
         glUniformMatrix4fv( u_tView, 1, GL_FALSE, glm::value_ptr( _viewMatrix ) );
         glUniformMatrix4fv( u_tProj, 1, GL_FALSE, glm::value_ptr( _projMatrix ) );
 
-        _cube->getVertexArray()->bind();
-        _cube->getIndexBuffer()->bind();
+        // Drawing sphere
+        glUniformMatrix4fv( u_tModel, 1, GL_FALSE, glm::value_ptr( _sphere->getModelMatrix() ) );
+        glUniform3f( u_color, 1.0f, 0.84f, 0.0f );
+
+        _sphere->getVertexArray()->bind();
+        _sphere->getIndexBuffer()->bind();
 
         glDrawElements( GL_TRIANGLES, 
-                        _cube->getIndexBuffer()->getCount(), 
+                        _sphere->getIndexBuffer()->getCount(), 
                         GL_UNSIGNED_INT, 0 );
 
-        _cube->getVertexArray()->unbind();
-        _cube->getIndexBuffer()->unbind();
+        _sphere->getVertexArray()->unbind();
+        _sphere->getIndexBuffer()->unbind();
 
         // Drawing plane
         glUniformMatrix4fv( u_tModel, 1, GL_FALSE, glm::value_ptr( _plane->getModelMatrix() ) );
+        glUniform3f( u_color, 0.0f, 1.0f, 0.0f );
 
         _plane->getVertexArray()->bind();
         _plane->getIndexBuffer()->bind();
