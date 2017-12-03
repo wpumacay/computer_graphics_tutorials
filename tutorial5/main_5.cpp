@@ -49,6 +49,8 @@ int main()
 
     engine::LMesh* _cube = engine::LMeshBuilder::createBox( 0.5, 0.5, 0.5 );
 
+    engine::LMesh* _plane = engine::LMeshBuilder::createPlane( 10.0f, 10.0f );
+
     glm::vec3 _cameraPos( 7.0f, 3.0f, -10.0f );
     glm::vec3 _cameraDir( -7.0f, -3.0f, 10.0f );
     glm::vec3 _cameraTarget = _cameraPos + _cameraDir;
@@ -73,6 +75,7 @@ int main()
 
         glUseProgram( _pSimple3d );
 
+        // Drawing cube
         GLuint u_tModel = glGetUniformLocation( _pSimple3d, "u_tModel" );
         GLuint u_tView = glGetUniformLocation( _pSimple3d, "u_tView" );
         GLuint u_tProj = glGetUniformLocation( _pSimple3d, "u_tProj" );
@@ -90,6 +93,19 @@ int main()
 
         _cube->getVertexArray()->unbind();
         _cube->getIndexBuffer()->unbind();
+
+        // Drawing plane
+        glUniformMatrix4fv( u_tModel, 1, GL_FALSE, glm::value_ptr( _plane->getModelMatrix() ) );
+
+        _plane->getVertexArray()->bind();
+        _plane->getIndexBuffer()->bind();
+
+        glDrawElements( GL_TRIANGLES, 
+                        _plane->getIndexBuffer()->getCount(), 
+                        GL_UNSIGNED_INT, 0 );
+
+        _plane->getVertexArray()->unbind();
+        _plane->getIndexBuffer()->unbind();
 
         glUseProgram( 0 );
 

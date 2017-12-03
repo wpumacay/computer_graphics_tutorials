@@ -135,7 +135,52 @@ namespace engine
     }
 
 
+    LMesh* LMeshBuilder::createFromFile( const char* filename )
+    {
+        LMesh* _mesh = NULL;
 
+        vector<LVec3> _vertices;
+        vector<LVec3> _normals;
+        vector<LInd3> _indices;
+
+        ifstream _fileHandle( "../res/models/model_sphere_8.obj" );
+
+        string _line;
+
+        getline( _fileHandle, _line );
+
+        int _numFaces = stoi( _line );
+
+        int _indxCounter = 0;
+
+        for ( int q = 0; q < _numFaces; q++ )
+        {
+            getline( _fileHandle, _line );
+
+            int _numVertices = stoi( _line );
+
+            for ( int p = 0; p < _numVertices; p++ )
+            {
+                getline( _fileHandle, _line );
+                vector<string> _elemns = LMeshBuilder::_split( _line );
+
+                GLfloat _vx = stof( _elemns[0] );
+                GLfloat _vy = stof( _elemns[1] );
+                GLfloat _vz = stof( _elemns[2] );
+
+                _vertices.push_back( LVec3( _vx, _vy, _vz ) );
+                _indices.push_back( LInd3( _indxCounter, 
+                                           _indxCounter + 1, 
+                                           _indxCounter + 2 ) );
+                _indxCounter += 3;
+            }
+
+            LVec3 _n = _computeFaceNormal();
+        }
+
+
+        return _mesh;
+    }
 
 
 
