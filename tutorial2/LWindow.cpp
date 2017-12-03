@@ -92,7 +92,7 @@ namespace engine
         {
             return;
         }
-        
+
         double _x, _y;
         glfwGetCursorPos( pWindow, &_x, &_y );
 

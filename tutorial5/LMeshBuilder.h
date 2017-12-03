@@ -21,6 +21,7 @@ namespace engine
 
         static LMesh* createBox( GLfloat width, GLfloat height, GLfloat depth );
         static LMesh* createPlane( GLfloat width, GLfloat depth );
+        //static LMesh* createFromFile( const char* filename );
 
     };
 

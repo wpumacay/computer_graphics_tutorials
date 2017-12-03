@@ -6,6 +6,9 @@
 #include "LVertexBuffer.h"
 #include "LIndexBuffer.h"
 
+#include "LMeshBuilder.h"
+#include "LMesh.h"
+
 #include <iostream>
 
 using namespace std;
@@ -42,67 +45,24 @@ int main()
     // Initialize shader manager
     engine::LShaderManager::create();
 
-    GLuint _pSimple = engine::LShaderManager::INSTANCE->programs["basic"];
-    // cout << "simpleId: " << _pSimple << endl;
+    GLuint _pSimple3d = engine::LShaderManager::INSTANCE->programs["basic3d"];
 
-    // Quad vertices
-    
-    // GLfloat _vertices[] = 
-    // {
-    //     -0.5f, -0.5f,
-    //      0.5f, -0.5f,
-    //      0.5f,  0.5f,
-    //     -0.5f,  0.5f
-    // };
-    
-    // GLfloat _colors[] =
-    // {
-    //     1.0f, 0.0f, 0.0f,
-    //     0.0f, 1.0f, 0.0f,
-    //     0.0f, 0.0f, 1.0f,
-    //     1.0f, 1.0f, 1.0f
-    // };
+    engine::LMesh* _cube = engine::LMeshBuilder::createBox( 0.5, 0.5, 0.5 );
 
-    // GLuint _indices[] =
-    // {
-    //     0, 1, 2,
-    //     2, 3, 0
-    // };
-    
-    // Quad vertices
-    
-    GLfloat* _vertices = new GLfloat[8];
-    _vertices[0] = -0.5f; _vertices[1] = -0.5f;
-    _vertices[2] =  0.5f; _vertices[3] = -0.5f;
-    _vertices[4] =  0.5f; _vertices[5] =  0.5f;
-    _vertices[6] = -0.5f; _vertices[7] =  0.5f;
+    glm::vec3 _cameraPos( 7.0f, 3.0f, -10.0f );
+    glm::vec3 _cameraDir( -7.0f, -3.0f, 10.0f );
+    glm::vec3 _cameraTarget = _cameraPos + _cameraDir;
+    glm::vec3 _worldUp( 0.0f, 1.0f, 0.0f );
 
-    GLfloat* _colors = new GLfloat[12];
-    _colors[0] = 1.0f; _colors[1] = 0.0f;  _colors[2] = 0.0f;
-    _colors[3] = 0.0f; _colors[4] = 1.0f;  _colors[5] = 0.0f;
-    _colors[6] = 0.0f; _colors[7] = 0.0f;  _colors[8] = 1.0f;
-    _colors[9] = 1.0f; _colors[10] = 1.0f; _colors[11] = 1.0f;
+    glm::mat4 _viewMatrix = glm::lookAt( _cameraPos,
+                                         _cameraTarget,
+                                         _worldUp );
 
-    GLuint* _indices = new GLuint[6];
-    _indices[0] = 0; _indices[1] = 1; _indices[2] = 2;
-    _indices[3] = 2; _indices[4] = 3; _indices[5] = 0;
+    glm::mat4 _projMatrix = glm::perspective( glm::radians( 45.0f ),
+                                              (float) _window.width() / _window.height(),
+                                              0.1f, 100.0f );
 
-    engine::LVertexBuffer* _posBuffer = new engine::LVertexBuffer();
-    _posBuffer->setData( 8 * sizeof( GLfloat ), 2, _vertices );
-
-    engine::LVertexBuffer* _colorBuffer = new engine::LVertexBuffer();
-    _colorBuffer->setData( 12 * sizeof( GLfloat ), 3, _colors );
-
-    engine::LIndexBuffer* _indxBuffer = new engine::LIndexBuffer();
-    _indxBuffer->setData( 6 * sizeof( GLuint ), 6, _indices );
-
-    engine::LVertexArray* _vertexArray = new engine::LVertexArray();
-    _vertexArray->addBuffer( _posBuffer, 0 );
-    _vertexArray->addBuffer( _colorBuffer, 1 );
-
-    delete[] _vertices;
-    delete[] _colors;
-    delete[] _indices;
+    _cube->pos = engine::LVec3( 3.0f, 1.0f, 5.0f );
 
     while ( _window.isActive() )
     {
@@ -111,15 +71,25 @@ int main()
 
         // render loop
 
-        glUseProgram( _pSimple );
+        glUseProgram( _pSimple3d );
 
-        _vertexArray->bind();
-        _indxBuffer->bind();
+        GLuint u_tModel = glGetUniformLocation( _pSimple3d, "u_tModel" );
+        GLuint u_tView = glGetUniformLocation( _pSimple3d, "u_tView" );
+        GLuint u_tProj = glGetUniformLocation( _pSimple3d, "u_tProj" );
 
-        glDrawElements( GL_TRIANGLES, _indxBuffer->getCount(), GL_UNSIGNED_INT, 0 );
+        glUniformMatrix4fv( u_tModel, 1, GL_FALSE, glm::value_ptr( _cube->getModelMatrix() ) );
+        glUniformMatrix4fv( u_tView, 1, GL_FALSE, glm::value_ptr( _viewMatrix ) );
+        glUniformMatrix4fv( u_tProj, 1, GL_FALSE, glm::value_ptr( _projMatrix ) );
 
-        _indxBuffer->unbind();
-        _vertexArray->unbind();
+        _cube->getVertexArray()->bind();
+        _cube->getIndexBuffer()->bind();
+
+        glDrawElements( GL_TRIANGLES, 
+                        _cube->getIndexBuffer()->getCount(), 
+                        GL_UNSIGNED_INT, 0 );
+
+        _cube->getVertexArray()->unbind();
+        _cube->getIndexBuffer()->unbind();
 
         glUseProgram( 0 );
 

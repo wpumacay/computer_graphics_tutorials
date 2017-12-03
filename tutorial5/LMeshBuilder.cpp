@@ -80,7 +80,7 @@ namespace engine
         return _mesh;
     }
     
-    LMesh* LMeshBuilder::_createPlane( GLfloat width, GLfloat depth )
+    LMesh* LMeshBuilder::createPlane( GLfloat width, GLfloat depth )
     {
         LMesh* _mesh = NULL;
 

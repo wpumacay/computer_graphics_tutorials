@@ -12,5 +12,5 @@ out vec3 fNormal;
 void main()
 {
     gl_Position = u_tProj * u_tView * u_tModel * vec4( position, 1.0f );
-    //fNormal = 
+    fNormal = mat3( transpose( inverse( u_tModel ) ) ) * normal;
 }

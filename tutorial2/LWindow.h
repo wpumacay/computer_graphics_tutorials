@@ -9,7 +9,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#define CLEAR_COLOR 1.0f, 1.0f, 1.0f, 1.0f
+#define CLEAR_COLOR 0.529f, 0.807f, 0.92f, 1.0f
 
 namespace engine
 {

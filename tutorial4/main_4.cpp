@@ -70,7 +70,7 @@ int main()
     // };
     
     // Quad vertices
-    
+
     GLfloat* _vertices = new GLfloat[8];
     _vertices[0] = -0.5f; _vertices[1] = -0.5f;
     _vertices[2] =  0.5f; _vertices[3] = -0.5f;

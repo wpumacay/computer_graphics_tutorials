@@ -9,8 +9,6 @@
 using namespace std;
 
 
-
-
 namespace engine
 {
 
@@ -36,7 +34,7 @@ namespace engine
 
         ~LMesh();
 
-        void getModelMatrix() const;
+        glm::mat4 getModelMatrix() const;
 
         LVertexArray* getVertexArray() const { return m_vertexArray; }
         LIndexBuffer* getIndexBuffer() const { return m_indexBuffer; }

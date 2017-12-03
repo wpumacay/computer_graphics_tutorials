@@ -88,7 +88,7 @@ namespace engine
     void LWindow::onMouseCallback( GLFWwindow* pWindow, int button, 
                                    int action, int mode )
     {
-        if ( LWindow::INSTANCE->m_keyCallback == NULL )
+        if ( LWindow::INSTANCE->m_mouseCallback == NULL )
         {
             return;
         }

@@ -14,11 +14,11 @@ namespace engine
     {
         LVertexBuffer* _vBuffer = new LVertexBuffer();
         _vBuffer->setData( sizeof( LVec3 ) * vertices.size(),
-                           3, vertices.data() );
+                           3, (GLfloat*) vertices.data() );
 
         LVertexBuffer* _nBuffer = new LVertexBuffer();
         _nBuffer->setData( sizeof( LVec3 ) * normals.size(),
-                           3, normals.data() );
+                           3, (GLfloat*) normals.data() );
 
         m_vertexArray = new LVertexArray();
         m_vertexArray->addBuffer( _vBuffer, 0 );
@@ -26,7 +26,7 @@ namespace engine
 
         m_indexBuffer = new LIndexBuffer();
         m_indexBuffer->setData( sizeof( LInd3 ) * indices.size(), 
-                                3 * indices.size(), indices.data() );
+                                3 * indices.size(), (GLuint*) indices.data() );
 
         scale = LVec3( 1.0f, 1.0f, 1.0f );
     }
@@ -38,7 +38,7 @@ namespace engine
         delete m_indexBuffer;
     }
 
-    void LMesh::getModelMatrix()
+    glm::mat4 LMesh::getModelMatrix() const
     {
         glm::mat4 _model = glm::mat4( 1.0f );
 
