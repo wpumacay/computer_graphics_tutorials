@@ -28,14 +28,23 @@ namespace engine
         m_indexBuffer->setData( sizeof( LInd3 ) * indices.size(), 
                                 3 * indices.size(), (GLuint*) indices.data() );
 
+        // Create a default material
+        m_material = new LMaterial();
+
         scale = LVec3( 1.0f, 1.0f, 1.0f );
     }
-
 
     LMesh::~LMesh()
     {
         delete m_vertexArray;
         delete m_indexBuffer;
+        delete m_material;
+    }
+
+    void LMesh::setMaterial( LMaterial* pMaterial )
+    { 
+        delete m_material;
+        m_material = pMaterial;
     }
 
     glm::mat4 LMesh::getModelMatrix() const
@@ -43,9 +52,7 @@ namespace engine
         glm::mat4 _model = glm::mat4( 1.0f );
 
         _model = glm::scale( _model, glm::vec3( scale.x, scale.y, scale.z ) );
-        _model = glm::rotate( _model, glm::radians( rot.x ), glm::vec3( 1.0f, 0.0f, 0.0f ) );
-        _model = glm::rotate( _model, glm::radians( rot.y ), glm::vec3( 0.0f, 1.0f, 0.0f ) );
-        _model = glm::rotate( _model, glm::radians( rot.z ), glm::vec3( 0.0f, 0.0f, 1.0f ) );
+        _model = rotation * _model;
         _model = glm::translate( _model, glm::vec3( pos.x, pos.y, pos.z ) );
 
         return _model;
@@ -53,12 +60,17 @@ namespace engine
 
     void LMesh::render()
     {
+        
         m_vertexArray->bind();
         m_indexBuffer->bind();
+
+        m_material->bind();
 
         glDrawElements( GL_TRIANGLES, 
                         m_indexBuffer->getCount(), 
                         GL_UNSIGNED_INT, 0 );
+
+        m_material->unbind();
 
         m_indexBuffer->unbind();
         m_vertexArray->unbind();

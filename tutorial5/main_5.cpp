@@ -42,6 +42,8 @@ int main()
 
     _window.registerKeyCallback( onKeyCallback );
 
+    glEnable( GL_DEPTH_TEST );
+
     // Initialize shader manager
     engine::LShaderManager::create();
 
@@ -50,7 +52,8 @@ int main()
     //engine::LMesh* _cube = engine::LMeshBuilder::createBox( 0.5, 0.5, 0.5 );
     engine::LMesh* _sphere = engine::LMeshBuilder::createFromFile( "../res/models/model_sphere_1024.obj" );
 
-    engine::LMesh* _plane = engine::LMeshBuilder::createPlane( 10.0f, 10.0f );
+    engine::LMesh* _plane = engine::LMeshBuilder::createPlane( 10.0f, 12.0f );
+    _plane->pos = engine::LVec3( 0.0f, 0.0f, 2.0f );
 
     glm::vec3 _cameraPos( 7.0f, 3.0f, -10.0f );
     glm::vec3 _cameraDir( -7.0f, -3.0f, 10.0f );
