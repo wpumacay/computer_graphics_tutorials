@@ -2,6 +2,7 @@
 
 #include "LScene.h"
 #include "LFixedCamera3d.h"
+#include "LMeshComponent.h"
 
 
 namespace engine
@@ -38,6 +39,30 @@ namespace engine
         for ( LEntity* _entity : m_entities )
         {
             _entity->update( dt );
+        }
+    }
+
+    void LScene::enableLighting()
+    {
+        for ( LEntity* _entity : m_entities )
+        {
+            auto _meshComponent = _entity->getComponent<LMeshComponent>();
+            if ( _meshComponent != NULL )
+            {
+                _meshComponent->getMesh()->enableLighting();
+            }
+        }
+    }
+
+    void LScene::disableLighting()
+    {
+        for ( LEntity* _entity : m_entities )
+        {
+            auto _meshComponent = _entity->getComponent<LMeshComponent>();
+            if ( _meshComponent != NULL )
+            {
+                _meshComponent->getMesh()->disableLighting();
+            }
         }
     }
 

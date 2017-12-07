@@ -19,11 +19,13 @@ namespace engine
     {
         m_direction = direction;
         m_type = "directional";
+
+        LLightDirectional::s_count++;
     }
 
     LLightDirectional::~LLightDirectional()
     {
-
+        LLightDirectional::s_count--;
     }
 
 
@@ -39,7 +41,7 @@ namespace engine
 
         string _u_variant = "";
 
-        GLuint _u_ambient, _u_diffuse, _u_specular, _u_direction;
+        GLuint _u_ambient, _u_diffuse, _u_specular, _u_direction, _u_active;
 
         _u_variant = _u_location; _u_variant += ".ambient";
         _u_ambient = glGetUniformLocation( _currentShader, _u_variant.c_str() );
@@ -53,10 +55,14 @@ namespace engine
         _u_variant   = _u_location; _u_variant += ".direction";
         _u_direction = glGetUniformLocation( _currentShader, _u_variant.c_str() );
 
+        _u_variant   = _u_location; _u_variant += ".isActive";
+        _u_active = glGetUniformLocation( _currentShader, _u_variant.c_str() );
+
         glUniform3f( _u_ambient, m_ambient.x, m_ambient.y, m_ambient.z );
         glUniform3f( _u_diffuse, m_diffuse.x, m_diffuse.y, m_diffuse.z );
         glUniform3f( _u_specular, m_specular.x, m_specular.y, m_specular.z );
         glUniform3f( _u_direction, m_direction.x, m_direction.y, m_direction.z );
+        glUniform1i( _u_active, active );
 
     }
 

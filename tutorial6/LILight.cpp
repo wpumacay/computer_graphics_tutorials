@@ -20,6 +20,8 @@ namespace engine
         m_indx = lIndx;
 
         m_type = "base";
+
+        active = 1;
     }
 
     LILight::~LILight()

@@ -8,6 +8,8 @@ struct LLightDirectional
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
+
+    int isActive;
 };
 
 struct LLightPoint
@@ -21,6 +23,8 @@ struct LLightPoint
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
+
+    int isActive;
 };
 
 struct LLightSpot
@@ -38,6 +42,8 @@ struct LLightSpot
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
+
+    int isActive;
 };
 
 struct LMaterial
@@ -86,6 +92,10 @@ void main()
         {
             break;
         }
+        if ( u_directionalLights[q].isActive == 0 )
+        {
+            continue;
+        }
         _result += computeDirectionalContribution( u_directionalLights[q],
                                                    _normal, _viewDir );
     }
@@ -96,7 +106,10 @@ void main()
         {
             break;
         }
-
+        if ( u_pointLights[q].isActive == 0 )
+        {
+            continue;
+        }
         _result += computePointContribution( u_pointLights[q],
                                               _normal, vFragPos, _viewDir );
     }
@@ -107,7 +120,10 @@ void main()
         {
             break;
         }
-
+        if ( u_spotLights[q].isActive == 0 )
+        {
+            continue;
+        }
         _result += computeSpotContribution( u_spotLights[q],
                                             _normal, vFragPos, _viewDir );
     }
@@ -177,9 +193,9 @@ vec3 computeSpotContribution( LLightSpot light, vec3 normal, vec3 fragPos, vec3 
     vec3 _ambient  = light.ambient * u_material.ambient;
     vec3 _diffuse  = _diff * light.diffuse * u_material.diffuse;
     vec3 _specular = _spec * light.specular * u_material.specular;
-    _ambient  *= _attenuation * _intensity;
-    _diffuse  *= _attenuation * _intensity;
-    _specular *= _attenuation * _intensity;
+    _ambient  *= _attenuation * pow( _intensity, 15 );
+    _diffuse  *= _attenuation * pow( _intensity, 15 );
+    _specular *= _attenuation * pow( _intensity, 15 );
     
     return _ambient + _diffuse + _specular;
 }

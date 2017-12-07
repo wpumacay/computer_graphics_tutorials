@@ -6,6 +6,8 @@
 #include "LMeshComponent.h"
 #include "LMesh.h"
 #include "LLightDirectional.h"
+#include "LLightPoint.h"
+#include "LLightSpot.h"
 
 using namespace std;
 
@@ -62,12 +64,13 @@ namespace engine
         if ( m_lightingEnabled )
         {
             auto _viewPos = pScene->getCurrentCamera()->getPosition();
+            //cout << "_viewPos: " << _viewPos.toString() << endl;
             glUniform3f( m_uniformViewPos, _viewPos.x, _viewPos.y, _viewPos.z );
             glUniform3f( m_uniformGlobalLight, 1.0f, 1.0f, 1.0f );
 
             glUniform1i( m_uniformNumDirectionalLights, LLightDirectional::s_count );
-            glUniform1i( m_uniformNumPointLights, 0 );
-            glUniform1i( m_uniformNumSpotLights, 0 );
+            glUniform1i( m_uniformNumPointLights, LLightPoint::s_count );
+            glUniform1i( m_uniformNumSpotLights, LLightSpot::s_count );
 
             auto _lights = pScene->getLights();
 

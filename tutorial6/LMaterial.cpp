@@ -37,7 +37,7 @@ namespace engine
 
     LMaterial::~LMaterial()
     {
-        
+
     }
 
     void LMaterial::bind()

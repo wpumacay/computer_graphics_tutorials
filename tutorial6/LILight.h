@@ -23,6 +23,8 @@ namespace engine
 
         public :
 
+        int active;
+
         LILight( const LVec3& ambient,
                  const LVec3& diffuse,
                  const LVec3& specular,

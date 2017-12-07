@@ -45,7 +45,7 @@ namespace engine
 
         void addComponent( LComponent* pComponent );
 
-        void update( float dt );
+        virtual void update( float dt );
     };
 
 

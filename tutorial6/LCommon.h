@@ -3,6 +3,7 @@
 
 #include <GL/glew.h>
 #include <iostream>
+#include <string>
 #include <vector>
 
 #ifndef GLM_ENABLE_EXPERIMENTAL
@@ -12,8 +13,11 @@
 #include <glm/gtc/matrix_transform.hpp> 
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/string_cast.hpp>
 
 using namespace std;
+
+#define _PI 3.141592653589793
 
 namespace engine
 {
@@ -72,6 +76,31 @@ namespace engine
             x *= sx; y *= sy; z *= sz;
         }
 
+        GLfloat length()
+        {
+            return sqrt( x * x + y * y + z * z );
+        }
+
+        string toString()
+        {
+            string _v;
+            _v += "( ";  _v += to_string( x );
+            _v += " , "; _v += to_string( y );
+            _v += " , "; _v += to_string( z );
+            _v += " )";
+
+            return _v;
+        }
+
+        static LVec3 normalize( const LVec3& v )
+        {
+            LVec3 _res = v;
+
+            _res.normalize();
+
+            return _res;
+        }
+
         static LVec3 cross( const LVec3& v1,
                             const LVec3& v2 )
         {
@@ -118,7 +147,7 @@ namespace engine
         }
     };
 
-
+    float toRadians( float angle );
 
 
 }

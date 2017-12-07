@@ -11,6 +11,7 @@ elseif( UNIX AND NOT APPLE )
     message( "Building tutorial 6 - linux" )
     add_executable( main_6.out 
                     main_6.cpp 
+                    LCommon.cpp
                     LComponent.cpp
                     LEntity.cpp
                     LFixedCamera3d.cpp
@@ -18,6 +19,8 @@ elseif( UNIX AND NOT APPLE )
                     LILight.cpp
                     LIndexBuffer.cpp
                     LLightDirectional.cpp
+                    LLightPoint.cpp
+                    LLightSpot.cpp
                     LMaterial.cpp
                     LMeshBuilder.cpp
                     LMeshComponent.cpp

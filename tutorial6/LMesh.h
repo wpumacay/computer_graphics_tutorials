@@ -27,6 +27,8 @@ namespace engine
 
         public :
 
+        bool drawAsWireframe;
+
         LVec3 pos;
         glm::mat4 rotation;
         LVec3 scale;
@@ -37,7 +39,7 @@ namespace engine
 
         ~LMesh();
 
-        glm::mat4 getModelMatrix() const;
+        glm::mat4 getModelMatrix();
 
         void setMaterial( LMaterial* pMaterial );
         LMaterial* getMaterial() const { return m_material; }

@@ -32,6 +32,10 @@ namespace engine
         m_material = new LMaterial();
 
         scale = LVec3( 1.0f, 1.0f, 1.0f );
+
+        drawAsWireframe = false;
+
+        rotation = glm::mat4( 1.0f );
     }
 
     LMesh::~LMesh()
@@ -47,20 +51,25 @@ namespace engine
         m_material = pMaterial;
     }
 
-    glm::mat4 LMesh::getModelMatrix() const
+    glm::mat4 LMesh::getModelMatrix()
     {
         glm::mat4 _model = glm::mat4( 1.0f );
 
-        _model = glm::scale( _model, glm::vec3( scale.x, scale.y, scale.z ) );
+        _model = glm::scale( glm::vec3( scale.x, scale.y, scale.z ) ) * _model;
         _model = rotation * _model;
-        _model = glm::translate( _model, glm::vec3( pos.x, pos.y, pos.z ) );
+        _model = glm::translate( glm::vec3( pos.x, pos.y, pos.z ) ) * _model;
 
         return _model;
     }
 
     void LMesh::render()
     {
-        
+
+        if ( drawAsWireframe )
+        {
+            glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+        }
+
         m_vertexArray->bind();
         m_indexBuffer->bind();
 
@@ -74,5 +83,11 @@ namespace engine
 
         m_indexBuffer->unbind();
         m_vertexArray->unbind();
+
+        if ( drawAsWireframe )
+        {
+            glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+        }
+
     }
 }

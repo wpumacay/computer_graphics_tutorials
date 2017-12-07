@@ -43,6 +43,9 @@ namespace engine
         }
 
 
+        void enableLighting();
+        void disableLighting();
+
         glm::mat4 getProjMatrix() { return m_projMatrix; }
         LICamera* getCurrentCamera() { return m_currentCamera; }
         vector<LILight*>& getLights() { return m_lights; }
