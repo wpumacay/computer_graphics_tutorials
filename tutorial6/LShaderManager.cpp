@@ -1,6 +1,7 @@
 
 
 #include "LShaderManager.h"
+#include "../Config.h"
 
 using namespace std;
 
@@ -14,13 +15,7 @@ namespace engine
         // Load all shaders available
 
         GLuint _vShader, _fShader, _program;
-
-        _vShader = createShader( "../res/shaders/basic_vs.glsl", GL_VERTEX_SHADER );
-        _fShader = createShader( "../res/shaders/basic_fs.glsl", GL_FRAGMENT_SHADER );
-        _program = createProgram( _vShader, _fShader );
-
-        programs["basic"] = _program;
-
+#ifdef USE_MODERN
         _vShader = createShader( "../res/shaders/basic3d_vs.glsl", GL_VERTEX_SHADER );
         _fShader = createShader( "../res/shaders/basic3d_fs.glsl", GL_FRAGMENT_SHADER );
         _program = createProgram( _vShader, _fShader );
@@ -32,6 +27,19 @@ namespace engine
         _program = createProgram( _vShader, _fShader );
 
         programs["basic3d_lighting"] = _program;
+#else
+        _vShader = createShader( "../res/shaders/basic3d_vs_120.glsl", GL_VERTEX_SHADER );
+        _fShader = createShader( "../res/shaders/basic3d_fs_120.glsl", GL_FRAGMENT_SHADER );
+        _program = createProgram( _vShader, _fShader );
+
+        programs["basic3d"] = _program;
+
+        _vShader = createShader( "../res/shaders/basic3d_lighting_vs_120.glsl", GL_VERTEX_SHADER );
+        _fShader = createShader( "../res/shaders/basic3d_lighting_fs_120.glsl", GL_FRAGMENT_SHADER );
+        _program = createProgram( _vShader, _fShader );
+
+        programs["basic3d_lighting"] = _program;
+#endif
     }
 
     LShaderManager::~LShaderManager()

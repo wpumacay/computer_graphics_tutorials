@@ -9,3 +9,8 @@
 
 #define APP_WIDTH  600
 #define APP_HEIGHT 600
+
+//#define GLFW_SUPPORT_ENABLED 1
+#define GLUT_SUPPORT_ENABLED 1
+
+//#define USE_MODERN 1

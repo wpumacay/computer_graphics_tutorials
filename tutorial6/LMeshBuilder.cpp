@@ -190,7 +190,8 @@ namespace engine
         }
 
         _mesh = new LMesh( _vertices, _normals, _indices );
-
+        _mesh->type = "sphere";
+        
         return _mesh;
     }
 
@@ -202,7 +203,7 @@ namespace engine
     ************************************************************************/
 
 
-    LVec3 LMeshBuilder::_computeFaceNormal( LVec3 v1, LVec3 v2, LVec3 v3 )
+    LVec3 LMeshBuilder::_computeFaceNormal( LVec3 v1, LVec3 v2, LVec3 v3, bool normalize )
     {
         LVec3 _res;
 
@@ -210,6 +211,10 @@ namespace engine
         LVec3 _v23 = v3 - v2;
 
         _res = LVec3::cross( _v12, _v23 );
+        if ( normalize )
+        {
+            _res.normalize();
+        }
 
         return _res;
     }

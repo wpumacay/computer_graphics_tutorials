@@ -38,6 +38,8 @@ elseif( UNIX AND NOT APPLE )
                            GLEW::GLEW 
                            ${X11_LIBRARIES} 
                            ${CMAKE_THREAD_LIBS_INIT}
+                           ${GLUT_LIBRARY}
+                           GLU
                            dl )
 
 elseif( APPLE )

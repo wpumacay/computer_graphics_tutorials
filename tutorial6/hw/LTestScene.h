@@ -113,6 +113,22 @@ namespace hw
             m_mainPointLight->active = active;
         }
 
+        void increaseCamera( float dx, float dy, float dz )
+        {
+            LVec3 _cpos = m_currentCamera->getPosition();
+
+            _cpos.x += dx;
+            _cpos.y += dy;
+            _cpos.z += dz;
+
+            m_currentCamera->setPosition( _cpos );
+        }
+
+        void resetCamera()
+        {
+            m_currentCamera->setPosition( LVec3( 7.0f, 3.0f, -10.0f ) );
+        }
+
     };
 
 

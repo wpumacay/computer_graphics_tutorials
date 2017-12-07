@@ -25,7 +25,15 @@ namespace engine
         LIndexBuffer* m_indexBuffer;
         LMaterial* m_material;
 
+        LVertexBuffer* m_vBuffer;
+        LVertexBuffer* m_nBuffer;
+        vector<LVec3> m_vertices;
+        vector<LVec3> m_normals;
+        vector<LInd3> m_indices;
+
         public :
+
+        string type;
 
         bool drawAsWireframe;
 
@@ -38,6 +46,8 @@ namespace engine
                const vector<LInd3>& indices );
 
         ~LMesh();
+
+        void recomputeNormals( bool useSmoothShading );
 
         glm::mat4 getModelMatrix();
 

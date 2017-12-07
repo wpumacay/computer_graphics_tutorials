@@ -53,6 +53,8 @@ namespace engine
 
         void update( float dt );
 
+        void setShadingMode( bool useSmoothShading );
+
     };
 
 

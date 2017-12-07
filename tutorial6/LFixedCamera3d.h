@@ -12,6 +12,10 @@ namespace engine
     class LFixedCamera3d : public LICamera
     {
 
+        protected :
+
+        void _updateCamera() override;
+
         public :
 
         LFixedCamera3d( const LVec3& pos,
